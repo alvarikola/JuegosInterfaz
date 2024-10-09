@@ -130,15 +130,16 @@ def juego2():
     etiquetaPalabras.pack()
 
     def jugar(resultadoRespuesta):
+        contador = 0
         puntos = 0
-        for palabra in range(5):
-            palabrasAleatorias = random.choice(list(palabras.keys()))
-            imprimirPalabras.set(palabrasAleatorias)
-            if resultadoRespuesta == palabras[palabrasAleatorias]:
-                imprimirResultado.set(f"Correcto")
-                puntos += 1
-            else:
-                imprimirResultado.set(f"Incorrecto")
+        palabrasAleatorias = random.choice(list(palabras.keys()))
+        imprimirPalabras.set(palabrasAleatorias)
+        if resultadoRespuesta == palabras[palabrasAleatorias]:
+            imprimirResultado.set(f"Correcto")
+            puntos += 1
+        else:
+            imprimirResultado.set(f"Incorrecto")
+        contador += 1
 
         imprimirPuntos.set(f"Tus puntos: {puntos}/5")
     botonJugar = ttk.Button(juego2Pantalla, text="Jugar", command=lambda: jugar(resultadoRespuesta))
