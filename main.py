@@ -32,9 +32,17 @@ def juego1():
     root.destroy()
     juego1Pantalla = tk.Tk()
     juego1Pantalla.title("Piedra Papel y Tijera")
+    
     titulo = "Piedra Papel y Tijera"
     label_titulo = tk.Label(text=titulo, font=("Arial", 20))
     label_titulo.pack(padx=20, pady=20)
+    
+    rutaImagen = 'imagenes/piedraPapelTijera.png'
+    imagen = Image.open(rutaImagen)
+    imagen = imagen.resize((300, 300))
+    imagen_tk = ImageTk.PhotoImage(imagen)
+    label_imagen = tk.Label(juego1Pantalla, image=imagen_tk)
+    label_imagen.pack(padx=20, pady=20)
 
     # ESTO ES CON RADIOBUTTON
     opcionJugador = tk.IntVar(value=0)  # Como StrinVar pero en entero
@@ -79,9 +87,15 @@ def juego1():
 
     botonJugar = ttk.Button(juego1Pantalla, text="Jugar", command=lambda:jugar(opcionJugador))
     botonJugar.pack()
+    
     imprimirResultado = tk.StringVar()
     etiquetaResultado = tk.Label(juego1Pantalla, textvariable=imprimirResultado)
     etiquetaResultado.pack()
+    
+    botonSalir = ttk.Button(juego1Pantalla, text="Salir", command=quit)
+    botonSalir.pack()
+
+    juego1Pantalla.mainloop()
 
 def juego2():
     root.destroy()
@@ -113,9 +127,15 @@ def juego2():
     label_titulo = tk.Label(text=titulo, font=("Arial", 20))
     label_titulo.pack(padx=20, pady=20)
 
+    rutaImagen = 'imagenes/palabrasIngles.png'
+    imagen = Image.open(rutaImagen)
+    imagen = imagen.resize((300, 300))
+    imagen_tk = ImageTk.PhotoImage(imagen)
+    label_imagen = tk.Label(juego2Pantalla, image=imagen_tk)
+    label_imagen.pack(padx=20, pady=20)
+
     respuesta = tk.Entry(juego2Pantalla)
     respuesta.pack()
-    resultadoRespuesta = respuesta.get()
 
     imprimirResultado = tk.StringVar()
     etiquetaResultado = tk.Label(juego2Pantalla, textvariable=imprimirResultado)
@@ -129,33 +149,60 @@ def juego2():
     etiquetaPalabras = tk.Label(juego2Pantalla, textvariable=imprimirPalabras)
     etiquetaPalabras.pack()
 
-    global contador
-    def jugar(resultadoRespuesta):
-        contador = 0
-        puntos = 0
+    puntos = 0
+    palabrasRestantes = 5
+    palabrasAleatorias = ""
+
+    def cambiarPalabra():
+        nonlocal palabrasAleatorias
         palabrasAleatorias = random.choice(list(palabras.keys()))
         imprimirPalabras.set(palabrasAleatorias)
+
+    def jugar():
+        nonlocal puntos, palabrasRestantes
+        resultadoRespuesta = respuesta.get()
+
         if resultadoRespuesta == palabras[palabrasAleatorias]:
             imprimirResultado.set(f"Correcto")
             puntos += 1
         else:
             imprimirResultado.set(f"Incorrecto")
-        contador += 1
-        if contador == 2:
-            botonJugar["state"] = tk.DISABLED
 
+        palabrasRestantes -=1
         imprimirPuntos.set(f"Tus puntos: {puntos}/5")
 
-    botonJugar = ttk.Button(juego2Pantalla, text="Jugar", command=lambda: jugar(resultadoRespuesta))
+        if palabrasRestantes > 0:
+            cambiarPalabra()
+        else:
+            imprimirPuntos.set(f"Tus puntuación final es: {puntos}/5")
+            botonJugar["state"] = tk.DISABLED
+
+    botonJugar = ttk.Button(juego2Pantalla, text="Jugar", command=jugar)
     botonJugar.pack()
 
+    cambiarPalabra()
 
+    botonSalir = ttk.Button(juego2Pantalla, text="Salir", command=quit)
+    botonSalir.pack()
+
+    juego2Pantalla.mainloop()
 
 
 def juego3():
     root.destroy()
     juego3Pantalla = tk.Tk()
     juego3Pantalla.title("Adivina el Número")
+    titulo = "Adivina el Número"
+    label_titulo = tk.Label(text=titulo, font=("Arial", 20))
+    label_titulo.pack(padx=20, pady=20)
+
+    rutaImagen = 'imagenes/adivinarNumero.png'
+    imagen = Image.open(rutaImagen)
+    imagen = imagen.resize((300, 300))
+    imagen_tk = ImageTk.PhotoImage(imagen)
+    label_imagen = tk.Label(juego3Pantalla, image=imagen_tk)
+    label_imagen.pack(padx=20, pady=20)
+    
     opcion = tk.Entry(juego3Pantalla)
     opcion.pack()
     numero = random.randint(0, 201)
@@ -193,7 +240,12 @@ def juego3():
 
     botonComprobar = ttk.Button(juego3Pantalla, text="Comprobar", command=comprobarJuego3)
     botonComprobar.pack()
+    
+    botonSalir = ttk.Button(juego3Pantalla, text="Salir", command=quit)
+    botonSalir.pack()
+    
     juego3Pantalla.mainloop()
+
 
 
 main()
