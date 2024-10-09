@@ -129,6 +129,7 @@ def juego2():
     etiquetaPalabras = tk.Label(juego2Pantalla, textvariable=imprimirPalabras)
     etiquetaPalabras.pack()
 
+    global contador
     def jugar(resultadoRespuesta):
         contador = 0
         puntos = 0
@@ -140,8 +141,11 @@ def juego2():
         else:
             imprimirResultado.set(f"Incorrecto")
         contador += 1
+        if contador == 2:
+            botonJugar["state"] = tk.DISABLED
 
         imprimirPuntos.set(f"Tus puntos: {puntos}/5")
+
     botonJugar = ttk.Button(juego2Pantalla, text="Jugar", command=lambda: jugar(resultadoRespuesta))
     botonJugar.pack()
 
