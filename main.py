@@ -30,74 +30,63 @@ def main():
 
 def juego1():
     root.destroy()
-    juego1 = tk.Tk()
-    juego1.title("Piedra Papel y Tijera")
+    juego1Pantalla = tk.Tk()
+    juego1Pantalla.title("Piedra Papel y Tijera")
     titulo = "Piedra Papel y Tijera"
     label_titulo = tk.Label(text=titulo, font=("Arial", 20))
     label_titulo.pack(padx=20, pady=20)
 
     # ESTO ES CON RADIOBUTTON
-    # opcionJugador =
+    opcionJugador = tk.IntVar(value=0)  # Como StrinVar pero en entero
+    piedra = tk.Radiobutton(
+        juego1Pantalla,
+        text="Piedra",
+        variable=opcionJugador,
+        value=0
+    )
+    piedra.pack()
+    papel = tk.Radiobutton(
+        juego1Pantalla,
+        text="Papel",
+        variable=opcionJugador,
+        value=1
+    )
+    papel.pack()
+    tijera = tk.Radiobutton(
+        juego1Pantalla,
+        text="Tijera",
+        variable=opcionJugador,
+        value=2
+    )
+    tijera.pack()
 
-    opcionJugador = int(input())
-    if opcionJugador >= 0 and opcionJugador <= 2:
+    def jugar(opcionJugador):
         opcionMaquina = random.randint(0, 2)
-        resultadoJuego = jugar(opcionJugador, opcionMaquina)
-        imprimirResultado(opcionJugador, opcionMaquina, resultadoJuego)
-    else:
-        print("Error, debe elegir entre 0 y 2.")
+        if opcionJugador.get() == opcionMaquina:
+            imprimirResultado.set(f"Máquina eligió lo mismo. Empate")
+        elif opcionJugador.get() == 0 and opcionMaquina == 1:
+            imprimirResultado.set(f"Máquina elige papel. Jugador Pierde")
+        elif opcionJugador.get() == 0 and opcionMaquina == 2:
+            imprimirResultado.set(f"Máquina elige tijera. Jugador Gana")
+        elif opcionJugador.get() == 1 and opcionMaquina == 0:
+            imprimirResultado.set(f"Máquina elige piedra. Jugador Gana")
+        elif opcionJugador.get() == 1 and opcionMaquina == 2:
+            imprimirResultado.set(f"Máquina elige tijera. Jugador Pierde")
+        elif opcionJugador.get() == 2 and opcionMaquina == 0:
+            imprimirResultado.set(f"Maquina elige piedra. Jugador Pierde")
+        elif opcionJugador.get() == 2 and opcionMaquina == 1:
+            imprimirResultado.set(f"Maquina elige papel. Jugador Gana")
 
-
-def jugar(opcionJugador, opcionMaquina):
-    resultado = 0
-    # calculo el resultado y luego lo devuelvo
-    if opcionJugador == opcionMaquina:
-        resultado = 1
-    elif opcionJugador == 0 and opcionMaquina == 1:
-        resultado = 2
-    elif opcionJugador == 0 and opcionMaquina == 2:
-        resultado = 0
-    elif opcionJugador == 1 and opcionMaquina == 0:
-        resultado = 0
-    elif opcionJugador == 1 and opcionMaquina == 2:
-        resultado = 2
-    elif opcionJugador == 2 and opcionMaquina == 0:
-        resultado = 2
-    elif opcionJugador == 2 and opcionMaquina == 1:
-        resultado = 0
-    return resultado
-
-
-def obtenerOpcionMedianteNumero(numeroOpcion):
-    # 0 es piedra, 1 es papel, 2 es tijera
-    if numeroOpcion == 0:
-        return "piedra"
-    elif numeroOpcion == 1:
-        return "papel"
-    else:
-        return "tijera"
-
-
-def obtenerResultadoMedianteNumero(resultado):
-    if resultado == 0:
-        return "jugador gana"
-    elif resultado == 1:
-        return "empate"
-    else:
-        return "jugador pierde"
-
-
-
-def imprimirResultado(opcionJugador, opcionMaquina, resultadoJuego):
-    print(f"Jugador elige: {obtenerOpcionMedianteNumero(opcionJugador)}")
-    print(f"Máquina elige: {obtenerOpcionMedianteNumero(opcionMaquina)}")
-    print(f"Resultado: {obtenerResultadoMedianteNumero(resultadoJuego)}")
-
+    botonJugar = ttk.Button(juego1Pantalla, text="Jugar", command=lambda:jugar(opcionJugador))
+    botonJugar.pack()
+    imprimirResultado = tk.StringVar()
+    etiquetaResultado = tk.Label(juego1Pantalla, textvariable=imprimirResultado)
+    etiquetaResultado.pack()
 
 def juego2():
     root.destroy()
-    juego2 = tk.Tk()
-    juego2.title("Palabras en Inglés")
+    juego2Pantalla = tk.Tk()
+    juego2Pantalla.title("Palabras en Inglés")
     palabras = {
         "Car": "Coche",
         "House": "Casa",
@@ -123,21 +112,39 @@ def juego2():
     titulo = "Traduce las palabras al español:"
     label_titulo = tk.Label(text=titulo, font=("Arial", 20))
     label_titulo.pack(padx=20, pady=20)
-    respuesta = tk.Entry(juego2)
+
+    respuesta = tk.Entry(juego2Pantalla)
     respuesta.pack()
+    resultadoRespuesta = respuesta.get()
+
+    imprimirResultado = tk.StringVar()
+    etiquetaResultado = tk.Label(juego2Pantalla, textvariable=imprimirResultado)
+    etiquetaResultado.pack()
+
+    imprimirPuntos = tk.StringVar()
+    etiquetaPuntos = tk.Label(juego2Pantalla, textvariable=imprimirPuntos)
+    etiquetaPuntos.pack()
+
+    imprimirPalabras = tk.StringVar()
+    etiquetaPalabras = tk.Label(juego2Pantalla, textvariable=imprimirPalabras)
+    etiquetaPalabras.pack()
+
+    def jugar(resultadoRespuesta):
+        puntos = 0
+        for palabra in range(5):
+            palabrasAleatorias = random.choice(list(palabras.keys()))
+            imprimirPalabras.set(palabrasAleatorias)
+            if resultadoRespuesta == palabras[palabrasAleatorias]:
+                imprimirResultado.set(f"Correcto")
+                puntos += 1
+            else:
+                imprimirResultado.set(f"Incorrecto")
+
+        imprimirPuntos.set(f"Tus puntos: {puntos}/5")
+    botonJugar = ttk.Button(juego2Pantalla, text="Jugar", command=lambda: jugar(resultadoRespuesta))
+    botonJugar.pack()
 
 
-    puntos = 0
-    for palabra in range(5):
-        palabrasAleatorias = random.choice(list(palabras.keys()))
-        respuesta = input(f"{palabrasAleatorias}: ")
-        if respuesta == palabras[palabrasAleatorias]:
-            print("Correcto")
-            puntos += 1
-        else:
-            print("Incorrecto")
-
-    print(f"Tus puntos: {puntos}/5")
 
 
 def juego3():
